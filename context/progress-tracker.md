@@ -4,7 +4,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Foundation / Design System (Completed)
+- Editor Chrome / Base Shell (Completed)
 
 ## Current Goal
 
@@ -20,6 +20,11 @@ Update this file whenever the current phase, active feature, or implementation s
   - Configured dark-only theme variables in `app/globals.css` and mapped tokens via `@theme inline` matching `context/ui-context.md`.
   - Added `dark` class to `<html>` in `app/layout.tsx` and ensured no default light styling appears.
   - Verified compilation and typecheck via `next build` and linting via `eslint`.
+- Feature Spec 02: Editor Base Chrome (`context/feature-specs/02-editor.md`)
+  - Created `components/editor/editor-navbar.tsx` with fixed height (`h-14`), left/center/right sections, sidebar toggle button using `PanelLeftOpen`/`PanelLeftClose` icons, empty right section, and dark background (`bg-surface`) with subtle bottom border (`border-border-default`).
+  - Created `components/editor/project-sidebar.tsx` that floats above the canvas (`fixed` overlay with shadow), slides in from the left via `translate-x` transition without pushing page content, accepts `isOpen` prop, includes `Projects` header with close button, shadcn `Tabs` for `My Projects` and `Shared` with empty placeholder states (`h-8 w-8` icons), and a full-width `New Project` button at the bottom with `Plus` icon.
+  - Implemented the reusable Dialog Pattern in `components/editor/editor-dialog.tsx` (and `components/editor/dialog-pattern.tsx`) using existing dark theme tokens (`bg-elevated`, `border-border-default`, `rounded-3xl`) with full support for title, description, and footer actions.
+  - Verified TypeScript compilation (`tsc --noEmit`) and ESLint (`eslint`) pass with 0 errors.
 
 ## In Progress
 
