@@ -13,6 +13,7 @@ export interface EditorNavbarProps {
   title?: React.ReactNode
   children?: React.ReactNode
   className?: string
+  toggleRef?: React.Ref<HTMLButtonElement>
 }
 
 export function EditorNavbar({
@@ -22,6 +23,7 @@ export function EditorNavbar({
   title,
   children,
   className,
+  toggleRef,
 }: EditorNavbarProps) {
   // Support either isOpen or isSidebarOpen prop
   const sidebarOpen = isSidebarOpen ?? isOpen ?? false
@@ -36,6 +38,9 @@ export function EditorNavbar({
       {/* Left section */}
       <div className="flex items-center gap-3">
         <Button
+          ref={toggleRef}
+          data-slot="sidebar-toggle"
+          data-sidebar-toggle="true"
           variant="ghost"
           size="icon"
           onClick={onToggleSidebar}

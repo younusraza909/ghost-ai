@@ -25,6 +25,7 @@ export interface EditorDialogProps {
   children?: React.ReactNode
   className?: string
   showCloseButton?: boolean
+  nativeButton?: boolean
 }
 
 /**
@@ -44,6 +45,7 @@ export function EditorDialog({
   children,
   className,
   showCloseButton = true,
+  nativeButton,
 }: EditorDialogProps) {
   const isControlled = open !== undefined || isOpen !== undefined
   const resolvedOpen = open ?? isOpen
@@ -61,9 +63,16 @@ export function EditorDialog({
       onOpenChange={handleOpenChange}
     >
       {trigger && (
-        <DialogTrigger
-          render={React.isValidElement(trigger) ? trigger : <span>{trigger}</span>}
-        />
+        React.isValidElement(trigger) ? (
+          <DialogTrigger
+            render={trigger}
+            nativeButton={nativeButton}
+          />
+        ) : (
+          <DialogTrigger nativeButton={nativeButton}>
+            {trigger}
+          </DialogTrigger>
+        )
       )}
       <DialogContent
         className={cn(

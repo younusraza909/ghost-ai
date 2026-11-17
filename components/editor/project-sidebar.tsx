@@ -11,6 +11,7 @@ export interface ProjectSidebarProps {
   onClose?: () => void
   onNewProject?: () => void
   className?: string
+  toggleRef?: React.RefObject<HTMLElement | null>
 }
 
 export function ProjectSidebar({
@@ -18,10 +19,37 @@ export function ProjectSidebar({
   onClose,
   onNewProject,
   className,
+  toggleRef,
 }: ProjectSidebarProps) {
+  const wasOpenRef = React.useRef(isOpen)
+
+  const restoreFocus = React.useCallback(() => {
+    if (toggleRef?.current) {
+      toggleRef.current.focus()
+    } else {
+      const toggle = document.querySelector<HTMLElement>(
+        '[data-slot="sidebar-toggle"], [data-sidebar-toggle="true"], button[aria-label*="sidebar"]'
+      )
+      toggle?.focus()
+    }
+  }, [toggleRef])
+
+  const handleClose = () => {
+    onClose?.()
+    restoreFocus()
+  }
+
+  React.useEffect(() => {
+    if (wasOpenRef.current && !isOpen) {
+      restoreFocus()
+    }
+    wasOpenRef.current = isOpen
+  }, [isOpen, restoreFocus])
+
   return (
     <aside
       aria-hidden={!isOpen}
+      inert={!isOpen ? true : undefined}
       className={cn(
         "fixed top-14 bottom-0 left-0 z-40 flex w-80 flex-col border-r border-border-default bg-surface/95 backdrop-blur-md shadow-2xl transition-transform duration-300 ease-in-out text-copy-primary",
         isOpen ? "translate-x-0" : "-translate-x-full pointer-events-none",
@@ -37,7 +65,7 @@ export function ProjectSidebar({
           <Button
             variant="ghost"
             size="icon-sm"
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Close sidebar"
             className="text-copy-muted hover:text-copy-primary"
           >
