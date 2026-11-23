@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react"
+import { UserButton } from "@clerk/nextjs"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -65,8 +66,10 @@ export function EditorNavbar({
         {children}
       </div>
 
-      {/* Right section (stays empty for now) */}
-      <div className="flex items-center justify-end" />
+      {/* Right section with Clerk's UserButton */}
+      <div className="flex items-center justify-end">
+        <UserButton />
+      </div>
     </header>
   )
 }

@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "clerk": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk/SKILL.md",
+      "computedHash": "f7fb7919d637744f4bd5c90da4a05516910908144e9ba8717027e626f987095a"
+    },
+    "clerk-backend-api": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-backend-api/SKILL.md",
+      "computedHash": "eccd4c2f0a999013bcd8ccefbbace142462559b1f6b15412adba2edff3c097cc"
+    },
+    "clerk-custom-ui": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-custom-ui/SKILL.md",
+      "computedHash": "1f9557f47a7b0ba8e8929d0d185ace24beab1e7a982da0f656b398ff8de68c33"
+    },
+    "clerk-nextjs-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-nextjs-patterns/SKILL.md",
+      "computedHash": "009fa620bdadba4d221fdd0a6e6c963f14c67fb5bd8b4008ccb1a96471655ef5"
+    },
+    "clerk-setup": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-setup/SKILL.md",
+      "computedHash": "0b1c0bf32f51d35073c03657e5bd23c09dddc43d0f9ba8e7ae247e4fa2e73a76"
+    }
+  }
+}
