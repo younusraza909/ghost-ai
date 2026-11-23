@@ -1,28 +1,39 @@
 "use client"
 
 import * as React from "react"
+import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Sparkles, Terminal } from "lucide-react"
-import { cn } from "@/lib/utils"
 import { EditorNavbar } from "@/components/editor/editor-navbar"
 import { ProjectSidebar } from "@/components/editor/project-sidebar"
-import { EditorDialog } from "@/components/editor/editor-dialog"
+import { CreateProjectDialog } from "@/components/editor/create-project-dialog"
+import { RenameProjectDialog } from "@/components/editor/rename-project-dialog"
+import { DeleteProjectDialog } from "@/components/editor/delete-project-dialog"
+import { useProjectDialogs } from "@/hooks/use-project-dialogs"
 
 export default function EditorPage() {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false)
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false)
+
+  const {
+    ownedProjects,
+    sharedProjects,
+    isCreateOpen,
+    isRenameOpen,
+    isDeleteOpen,
+    selectedProject,
+    openCreateDialog,
+    openRenameDialog,
+    openDeleteDialog,
+    closeDialog,
+    createName,
+    setCreateName,
+    createSlug,
+    renameName,
+    setRenameName,
+    isLoading,
+    handleCreateProject,
+    handleRenameProject,
+    handleDeleteProject,
+  } = useProjectDialogs()
 
   return (
     <div className="flex min-h-screen flex-col bg-base text-copy-primary">
@@ -32,7 +43,7 @@ export default function EditorPage() {
         onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)}
         title={
           <span className="text-xs font-semibold tracking-wider text-copy-muted uppercase">
-            Workspace Preview
+            Ghost AI
           </span>
         }
       />
@@ -41,113 +52,66 @@ export default function EditorPage() {
       <ProjectSidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
-        onNewProject={() => setIsDialogOpen(true)}
+        onNewProject={openCreateDialog}
+        ownedProjects={ownedProjects}
+        sharedProjects={sharedProjects}
+        onRenameProject={openRenameDialog}
+        onDeleteProject={openDeleteDialog}
       />
 
-      {/* Main Canvas / Content Surface */}
-      <main className="flex flex-1 flex-col items-center justify-center p-8">
-        <div className="w-full max-w-2xl space-y-6">
-          <div className="flex items-center gap-2">
-            <Terminal className="h-6 w-6 text-brand" />
-            <h1 className="text-2xl font-bold tracking-tight">Ghost AI Editor Workspace</h1>
+      {/* Editor Home: Minimal center layout without cards */}
+      <main className="flex flex-1 flex-col items-center justify-center p-6 text-center">
+        <div className="flex max-w-lg flex-col items-center space-y-3">
+          <h1 className="text-2xl font-bold tracking-tight text-copy-primary sm:text-3xl">
+            Create a project or open an existing one
+          </h1>
+          <p className="text-sm text-copy-muted leading-relaxed">
+            Start a new architecture workspace, or choose a project from the sidebar.
+          </p>
+          <div className="pt-3">
+            <Button
+              variant="default"
+              size="lg"
+              onClick={openCreateDialog}
+              className="gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              <span>New Project</span>
+            </Button>
           </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-brand" />
-                Editor Chrome &amp; Design System
-              </CardTitle>
-              <CardDescription>
-                Top navbar with profile menu, floating project sidebar with tabs, and reusable dialog pattern.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant="default"
-                  onClick={() => setIsSidebarOpen((prev) => !prev)}
-                >
-                  {isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
-                </Button>
-                <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
-                  Test Dialog Pattern
-                </Button>
-                <Button variant="outline">Outline</Button>
-                <Button variant="ghost">Ghost</Button>
-                <Button variant="destructive">Destructive</Button>
-              </div>
-
-              <div className="space-y-2">
-                <Input placeholder="Architecture prompt or project name..." />
-                <Textarea placeholder="Describe the system architecture..." />
-              </div>
-
-              <Tabs defaultValue="overview">
-                <TabsList>
-                  <TabsTrigger value="overview">Overview</TabsTrigger>
-                  <TabsTrigger value="canvas">Canvas</TabsTrigger>
-                  <TabsTrigger value="spec">Spec</TabsTrigger>
-                </TabsList>
-                <TabsContent value="overview" className="pt-2">
-                  <ScrollArea className="h-24 rounded-lg border p-3">
-                    <div className="space-y-1 text-sm text-copy-muted">
-                      <p>Ghost AI is a real-time collaborative system design workspace.</p>
-                      <p>Designed with a dark technical workspace visual language.</p>
-                      <p>Verified cn merge helper: {cn("p-2", "p-4")}</p>
-                    </div>
-                  </ScrollArea>
-                </TabsContent>
-                <TabsContent value="canvas" className="pt-2">
-                  <p className="text-sm text-copy-secondary">Canvas tab active.</p>
-                </TabsContent>
-                <TabsContent value="spec" className="pt-2">
-                  <p className="text-sm text-copy-secondary">Spec tab active.</p>
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsDialogOpen(true)}
-              >
-                Open Dialog Pattern
-              </Button>
-              <span className="text-xs text-copy-faint">v0.3.0</span>
-            </CardFooter>
-          </Card>
         </div>
       </main>
 
-      {/* Editor Dialog Pattern */}
-      <EditorDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        title="New Project Dialog Pattern"
-        description="Verify dialog pattern styled with dark theme tokens, supporting title, description, and footer actions."
-        footerActions={
-          <>
-            <Button
-              variant="secondary"
-              onClick={() => setIsDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="default"
-              onClick={() => setIsDialogOpen(false)}
-            >
-              Confirm
-            </Button>
-          </>
-        }
-      >
-        <div className="space-y-3">
-          <Input placeholder="Project title..." />
-          <Textarea placeholder="Project description..." />
-        </div>
-      </EditorDialog>
+      {/* Create Project Dialog */}
+      <CreateProjectDialog
+        isOpen={isCreateOpen}
+        onClose={closeDialog}
+        name={createName}
+        slug={createSlug}
+        onNameChange={setCreateName}
+        onSubmit={handleCreateProject}
+        isLoading={isLoading}
+      />
+
+      {/* Rename Project Dialog */}
+      <RenameProjectDialog
+        isOpen={isRenameOpen}
+        onClose={closeDialog}
+        projectName={selectedProject?.name ?? ""}
+        name={renameName}
+        onNameChange={setRenameName}
+        onSubmit={handleRenameProject}
+        isLoading={isLoading}
+      />
+
+      {/* Delete Project Dialog */}
+      <DeleteProjectDialog
+        isOpen={isDeleteOpen}
+        onClose={closeDialog}
+        projectName={selectedProject?.name ?? ""}
+        onConfirm={handleDeleteProject}
+        isLoading={isLoading}
+      />
     </div>
   )
 }

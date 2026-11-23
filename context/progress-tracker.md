@@ -4,7 +4,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Authentication / Clerk Setup (Completed)
+- Feature Spec 04: Project Dialogs & Editor Home (Completed)
 
 ## Current Goal
 
@@ -34,6 +34,17 @@ Update this file whenever the current phase, active feature, or implementation s
   - Updated `/` in `proxy.ts` and `app/page.tsx` to redirect authenticated users to `/editor` and unauthenticated users to `/sign-in`.
   - Moved the editor workspace to `app/editor/page.tsx` and integrated Clerk's built-in `UserButton` into `EditorNavbar` right section for profile settings and logout.
   - Verified end-to-end `npm run build` and `npm run lint` pass cleanly with 0 errors.
+- Feature Spec 04: Project Dialogs & Editor Home (`context/feature-specs/04-project-dialogs.md`)
+  - Built minimal `/editor` home screen without cards, featuring center heading "Create a project or open an existing one", description "Start a new architecture workspace, or choose a project from the sidebar.", and "New Project" button with `Plus` icon.
+  - Created dedicated hook `useProjectDialogs` in `hooks/use-project-dialogs.ts` managing dialog states (`create`, `rename`, `delete`), form states (`createName`, `createSlug`, `renameName`), and loading states (`isLoading`) with realistic mock project data.
+  - Implemented `slugify` utility in `lib/utils.ts` to power the live slug preview in real time as the user types.
+  - Created `CreateProjectDialog` in `components/editor/create-project-dialog.tsx` with project name input, live updating slug preview, and form submit.
+  - Created `RenameProjectDialog` in `components/editor/rename-project-dialog.tsx` with prefilled project name input, current project name shown in description, auto-focus, and Enter-key submission.
+  - Created `DeleteProjectDialog` in `components/editor/delete-project-dialog.tsx` with destructive confirmation only, no input, and destructive styling on confirm button.
+  - Updated `ProjectSidebar` in `components/editor/project-sidebar.tsx` with project item action buttons (rename, delete) shown only for owned projects, actions strictly hidden for shared projects, scrollable project lists, and mobile backdrop scrim with tap-outside and Escape to close.
+  - Wired editor home `New Project` button to Create dialog, sidebar `New Project` to Create dialog, sidebar item rename to Rename dialog, and sidebar item delete to Delete dialog.
+  - Fixed input text color across dialogs and global base layer so form inputs explicitly render white text (`text-white` / `var(--text-primary)`), preventing text from blending into dark input backgrounds.
+  - Verified end-to-end typecheck (`tsc --noEmit`), linting (`eslint`), and production build (`next build`) pass with 0 errors.
 
 ## In Progress
 
